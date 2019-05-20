@@ -1,0 +1,28 @@
+{% load static %}
+{% block content %}
+<div class="user">
+  <hr>
+  <ul>
+    {% if user.is_authenticated %}
+      <li>User: {{ user.get_username }}</li>
+      <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>  
+      <hr>
+      <h2>Create Task</h2>
+      <hr>
+      <form action="" method="post" class="create_task_form">
+        {% csrf_token %}
+        <table>
+        {{ form.as_p }}
+        </table>
+        <input type="submit" value="Submit">
+        <a href="{% url 'task_index' %}" class="btn btn-primary">Back...</a>
+      </form>
+      <br/>
+      <hr>
+    {% else %}
+        <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+    {% endif %} 
+  </ul>
+</div>
+
+{% endblock %}

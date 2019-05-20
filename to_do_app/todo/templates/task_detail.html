@@ -1,0 +1,45 @@
+{% load static %}
+{% block page_content %}
+<hr>
+<div class="user">
+    <ul>
+    {% if user.is_authenticated %}
+        <li>User: {{ user.get_username }}</li>
+        <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+    {% else %}
+        <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+    {% endif %} 
+    </ul>
+</div>
+<hr>
+<h2>Tasks Details</h2>
+<hr>
+<div>
+    {% if task.is_outdated %}
+        <div class="task_list" style="color: red">
+    {% else %}
+        <div class="task_list">
+    {% endif %}
+            <ul>
+                <li><h3 class="task-name"><em>Name:</em> {{ task.name }}</h3></li>
+                <p class="task-date"><em>End Date:</em> {{ task.end_date }}</p>
+                <p class="task-status"><em>Task status:</em> {{ task.status|yesno:"Done,New" }}</p>
+                <p class="task-author"><em>Author:</em> {{ task.author }}</p>
+                <p class="task-description"><em>Description:</em> {{ task.description }}</p>
+            </ul>
+            <br/>
+        </div>       
+    {% if task.status == False %}
+        <form action="{% url 'change_status' %}" method="get">
+            {% csrf_token %}
+            <input type="hidden" name="task_id" value="{{ task.id }}"/>
+            <input type="submit" value="Change Task Status">
+            <hr>
+        </form>
+    {% endif %}
+    <a href="{% url 'task_index' %}">Back...</a>
+    <br/>
+    <hr/>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% load static %}
+{% block page_content %}
+<hr>
+<div class="user">
+    <ul>
+        {% if user.is_authenticated %}
+            <li>User: {{ user.get_username }}</li>
+            <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+        {% else %}
+            <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+        {% endif %} 
+    </ul>
+    <hr>
+</div>
+<h2>Search Task</h2>
+<hr>
+{% if error %}
+    <p style="color: red;">Please submit a search term.</p>
+{% endif %}
+<form action="" method="get">
+    <input type="text" name="q">
+    <input type="submit" value="Search">
+</form>
+<hr>
+<a href="{% url 'task_index' %}">Back...</a>
+<br/>
+<hr/>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% load static %}
+{% block page_content %}
+<hr>
+<div class="task_index">
+    <div class="user">
+        <ul>    
+            {% if user.is_authenticated %}
+                <li>User: {{ user.get_username }}</li>
+                <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
+            {% else %}
+                <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>   
+            {% endif %} 
+        </ul>
+        <hr>
+    </div>
+    <div class="navbar">
+        <a href="{% url 'my_task' %}"><h2>My Tasks...</h2></a>
+        <a href="{% url 'create_task' %}"><h2>Create Task...</h2></a>
+        <a href="{% url 'search_task' %}"><h2>Search Task...</h2></a>
+    </div>
+    <hr>
+    <h2>Tasks</h2>
+        {% for task in tasks %}
+            {% if task.is_outdated %}
+                <div class="task_list" style="color: red">
+            {% else %}
+                <div class="task_list">
+            {% endif %}      
+                    <ul>
+                        <li><h3 class="task-name"><em>Name:</em> {{ task.name }}</h3></li>
+                        <p class="task-date"><em>End Date:</em> {{ task.end_date }}</p>
+                        <p class="task-status"><em>Task status:</em> {{ task.status|yesno:"Done,New" }}</p>
+                        <p class="task-author"><em>Author:</em> {{ task.author }}</p>
+                        <a href="{% url 'task_detail' task.pk %}" class="btn btn-primary">Task details...</a>
+                    </ul>
+                    <br/>
+                </div>  
+        {% endfor %}
+</div>
+<hr>
+{% endblock %}
